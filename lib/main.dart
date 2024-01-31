@@ -2,11 +2,11 @@ import 'package:to_do_app/shared/components/Bloc_observer.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:to_do_app/To_Do/To_Do.dart';
+import 'package:to_do_app/To_Do/to_do.dart';
 void main(){
   Bloc.observer = MyBlocObserver();
   runApp(MaterialApp(
-    home: To_Do(),
+    home: const ToDo(),
     theme: ThemeData(
         primarySwatch: Colors.deepOrange,
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -21,7 +21,7 @@ void main(){
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(
           iconTheme: IconThemeData(
-              color: Colors.black
+              color: Colors.white
           ),
           titleTextStyle: TextStyle(color: Colors.black,fontSize: 25,fontWeight: FontWeight.bold),
           systemOverlayStyle: SystemUiOverlayStyle(

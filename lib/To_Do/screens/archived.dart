@@ -1,43 +1,47 @@
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:to_do_app/To_Do/to_do_cubit/to_do_cubit.dart';
+import 'package:to_do_app/To_Do/to_do_cubit/to_do_states.dart';
 
 import '../../shared/components/components.dart';
-import '../To_Do_cubit/to_do_cubit.dart';
-import '../To_Do_cubit/to_do_states.dart';
-class archived_tasks extends StatelessWidget {
-
+class ArchivedTasks extends StatelessWidget {
+  const ArchivedTasks({super.key});
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<To_Do_cubit, to_do_states>(
-        listener: (BuildContext context, to_do_states state) {},
-        builder: (BuildContext context, to_do_states state) {
-          return ConditionalBuilder(
-            condition:To_Do_cubit.get(context).archivedtasks!.isNotEmpty,
-            builder: (context) => Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: ListView.separated(
-                physics: const BouncingScrollPhysics(),
-                itemBuilder: (context, index){
-                  return buildItem(To_Do_cubit.get(context).archivedtasks![index],context);
-                },
-                itemCount: To_Do_cubit.get(context).archivedtasks!.length,
-                separatorBuilder: (context, index) {
-                  return const SizedBox(
-                    height: 10,
-                  );
-                },
-              ),
+    return BlocConsumer<ToDoCubit, ToDoStates>(
+        listener: (context, ToDoStates state) {},
+        builder: (context, ToDoStates state) {
+          return Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: ListView.separated(
+              physics: const BouncingScrollPhysics(),
+              itemBuilder: (context, index){
+                return buildItem(ToDoCubit.get(context).archivedTasks![index],context);
+              },
+              itemCount: ToDoCubit.get(context).archivedTasks!.length,
+              separatorBuilder: (context, index) {
+                return const SizedBox(
+                  height: 10,
+                );
+              },
             ),
-            fallback: (context) => Center(
-                child:Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.menu,size: 100,color: Colors.grey),
-                    Text('No tasks yet, please add some',style: TextStyle(fontSize: 18,color: Colors.grey ),),
-                  ],
-                )),
           );
         });
   }
 }
+/*
+Padding(
+padding: const EdgeInsets.all(10.0),
+child: ListView.separated(
+physics: const BouncingScrollPhysics(),
+itemBuilder: (context, index){
+return buildItem(ToDoCubit.get(context).archivedTasks![index],context);
+},
+itemCount: ToDoCubit.get(context).archivedTasks!.length,
+separatorBuilder: (context, index) {
+return const SizedBox(
+height: 10,
+);
+},
+),
+);*/

@@ -1,47 +1,68 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:to_do_app/To_Do/to_do_cubit/to_do_cubit.dart';
+import 'package:to_do_app/To_Do/to_do_cubit/to_do_states.dart';
 
 import '../../shared/components/components.dart';
-import '../To_Do_cubit/to_do_cubit.dart';
-import '../To_Do_cubit/to_do_states.dart';
-class newTasks extends StatelessWidget {
+class NewTasks extends StatelessWidget {
+  const NewTasks({super.key});
   @override
   Widget build(BuildContext context) {
-
-    return BlocConsumer<To_Do_cubit, to_do_states>(
-        listener: (BuildContext context, to_do_states state) {},
-        builder: (BuildContext context, to_do_states state) {
-          return ConditionalBuilder(
-            condition:To_Do_cubit.get(context).new_tasks!.isNotEmpty,
-            builder: (context) => Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: ListView.separated(
-                physics: const BouncingScrollPhysics(),
-                itemBuilder: (context, index){
-                  return buildItem(To_Do_cubit.get(context).new_tasks![index],context);
-                },
-                itemCount: To_Do_cubit.get(context).new_tasks!.length,
-                separatorBuilder: (context, index) {
-                  return const SizedBox(
-                    height: 10,
-                  );
-                },
-              ),
-            ),
-            fallback: (context) => Center(
-                child:Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.menu,size: 100,color: Colors.grey),
-                    Text('No tasks yet, please add some',style: TextStyle(fontSize: 18,color: Colors.grey ),),
-                  ],
-                )),
-          );
-        });
+    return BlocConsumer<ToDoCubit,ToDoStates>(builder: (BuildContext context,ToDoStates state) {
+      ToDoCubit cubit = ToDoCubit.get(context);
+      return ConditionalBuilder(
+      condition:cubit.newTasksList!.isNotEmpty,
+      builder: (context) => Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: ListView.separated(
+          physics: const BouncingScrollPhysics(),
+          itemBuilder: (context, index){
+            return buildItem(cubit.newTasksList![index],context);
+          },
+          itemCount: cubit.newTasksList!.length,
+          separatorBuilder: (context, index) {
+            return const SizedBox(
+              height: 10,
+            );
+          },
+        ),
+      ),
+      fallback: (context) => const Center(
+          child:Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.menu,size: 100,color: Colors.grey),
+              Text('No tasks yet, please add some',style: TextStyle(fontSize: 18,color: Colors.grey ),),
+            ],
+          )),
+    );},
+    listener: (BuildContext context, ToDoStates state) { },);
   }
 }
-/*return tasks!.isEmpty  ?
-
-
-*/
+/*return ConditionalBuilder(
+condition:cubit.newTasksList!.isNotEmpty,
+builder: (context) => Padding(
+padding: const EdgeInsets.all(10.0),
+child: ListView.separated(
+physics: const BouncingScrollPhysics(),
+itemBuilder: (context, index){
+return buildItem(cubit.newTasksList![index],context);
+},
+itemCount: cubit.newTasksList!.length,
+separatorBuilder: (context, index) {
+return const SizedBox(
+height: 10,
+);
+},
+),
+),
+fallback: (context) => const Center(
+child:Column(
+mainAxisAlignment: MainAxisAlignment.center,
+children: [
+Icon(Icons.menu,size: 100,color: Colors.grey),
+Text('No tasks yet, please add some',style: TextStyle(fontSize: 18,color: Colors.grey ),),
+],
+)),
+);*/

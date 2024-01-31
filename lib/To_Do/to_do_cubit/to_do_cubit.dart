@@ -1,55 +1,60 @@
-import 'dart:core';
-import 'package:bloc/bloc.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:sqflite/sqlite_api.dart';
+import 'package:to_do_app/To_Do/screens/new_tasks.dart';
+import 'package:to_do_app/To_Do/to_do_cubit/to_do_states.dart';
+
 import '../screens/archived.dart';
 import '../screens/deleted.dart';
 import '../screens/done.dart';
-import '../screens/new_tasks.dart';
-import 'to_do_states.dart';
 
 
-class To_Do_cubit extends Cubit<to_do_states> {
-  To_Do_cubit() :super(IntialState());
+class ToDoCubit extends Cubit<ToDoStates> {
+  ToDoCubit() :super(InitialState());
   //one method one state
 
-  static To_Do_cubit get(context) => BlocProvider.of(context);
+  static ToDoCubit get(context) => BlocProvider.of<ToDoCubit>(context);
+  ///to_do.dart vars
+  var scaffoldKey = GlobalKey<ScaffoldState>();
+  var formKey = GlobalKey<FormState>();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  ///
   int currentIndex = 0;
   bool isShown = false;
   List<Widget> screens = [
-    newTasks(),
-    done_tasks(),
-    archived_tasks(),
-    Settings(),
+    const NewTasks(),
+    const DoneTasks(),
+    const ArchivedTasks(),
+    const Settings(),
   ];
   late Database db;
-  List<Map<dynamic,dynamic>>? tasks =[];
-  List<Map<dynamic,dynamic>>? new_tasks =[];
-  List<Map<dynamic,dynamic>>? donetasks =[];
-  List<Map<dynamic,dynamic>>? archivedtasks =[];
+  List<Map<dynamic,dynamic>>? newTasksList =[];
+  List<Map<dynamic,dynamic>>? doneTasks =[];
+  List<Map<dynamic,dynamic>>? archivedTasks =[];
 
 
   void changeIndex(int index){
     currentIndex = index;
-    emit(changeIndexState());
+    emit(ChangeIndexState());
   }
   void createDB(){
     //create db execute just one time.
     //if db is exist ,it display "db opened" ,if not it display db created then db opened
     openDatabase('To_Do_2.db', version: 1, onCreate:(db, version){
-      print("db created");
+      debugPrint("db created");
       db.execute(
           "CREATE TABLE tasks(id INTEGER PRIMARY KEY,name TEXT,time TEXT,date TEXT ,status TEXT)")
           .then((value) {
-        print("Table created");
+        debugPrint("Table created");
       }).catchError((error) {
-        print("error happen while creating the table ${error.toString()}");
+        debugPrint("error happen while creating the table ${error.toString()}");
       });
     }, onOpen: (db){
       getData(db);
-      print("db opened");
+      debugPrint("db opened");
     }).then((value){
       db = value;
       emit(CreateDBState());
@@ -68,21 +73,21 @@ class To_Do_cubit extends Cubit<to_do_states> {
   }
     void getData(db) async{
      db.rawQuery("SELECT * FROM tasks").then((value){
-       new_tasks =[];
-       donetasks =[];
-       archivedtasks =[];
+       newTasksList =[];
+       doneTasks =[];
+       archivedTasks =[];
        value!.forEach((element) {
-          if(element['status'] == 'new'){new_tasks!.add(element);}
+          if(element['status'] == 'new'){newTasksList!.add(element);}
 
-          else if(element['status'] == 'done'){donetasks!.add(element);}
+          else if(element['status'] == 'done'){doneTasks!.add(element);}
 
-          else{archivedtasks!.add(element);}
+          else{archivedTasks!.add(element);}
 
        });
        emit(GetState());
        //we make emit when the role of method is done
        //after the role of get is done and it is sure because of "then" we emit it not the declare of it.
-     }).catchError((error){print(error.toString());});
+     }).catchError((error){debugPrint(error.toString());});
 
   }
   insertIntoDb ({
@@ -93,20 +98,20 @@ class To_Do_cubit extends Cubit<to_do_states> {
     await db.transaction((txn) async {
       db.rawInsert('INSERT INTO tasks(name,time,date,status) VALUES("$title","$time","$date","new")')
           .then((value){
-        print('$value is inserted');
+        debugPrint('$value is inserted');
         //we use the get after insert immediately
         emit(InsertState());
         getData(db);
-      }).catchError((error){print("$error is happened during inserting");});
+      }).catchError((error){debugPrint("$error is happened during inserting");});
        return null;
     });
   }
   //this method used because of the change which happened
-void ChangefabIcon({required bool isshow}){
-    isShown = isshow;
-    emit(changeBSheetState());
+void changeFabIcon({required bool isShow}){
+    isShown = isShow;
+    emit(ChangeBSheetState());
 }
-void DeleteDB(){
+void deleteDB(){
      db.delete('tasks').then((value) {
        emit(DeleteState());
        getData(db);
@@ -114,7 +119,7 @@ void DeleteDB(){
      });
 
 }
-void DeleteItem({required int id}){
+void deleteItem({required int id}){
     db.rawDelete('DELETE FROM tasks WHERE id = ?',[id]).then((value){
       getData(db);
       emit(DeleteItemState());
