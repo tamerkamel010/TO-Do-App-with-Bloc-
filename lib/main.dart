@@ -8,6 +8,8 @@ void main(){
   runApp(MaterialApp(
     home: const ToDo(),
     theme: ThemeData(
+      fontFamily: "kindness",
+      useMaterial3: true,
         primarySwatch: Colors.deepOrange,
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           selectedIconTheme : IconThemeData(

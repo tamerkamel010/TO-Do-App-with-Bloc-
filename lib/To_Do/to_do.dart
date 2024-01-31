@@ -21,12 +21,9 @@ class ToDo extends StatelessWidget {
             automaticallyImplyLeading: false,
             title: const Text(
               "ToDo App",
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold,fontFamily: "kindness",color: Colors.white),
             ),
             centerTitle: true,
-            actions: [
-              IconButton(onPressed: (){ cubit.deleteDB();}, icon: const Icon(Icons.delete)),
-            ],
           ),
           body: Container(
             child: ToDoCubit.get(context).screens[cubit.currentIndex],
