@@ -2,15 +2,15 @@ import 'package:to_do_app/shared/components/Bloc_observer.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:to_do_app/To_Do/to_do.dart';
+import 'To_Do/splash_screen.dart';
 void main(){
   Bloc.observer = MyBlocObserver();
   runApp(MaterialApp(
-    home: const ToDo(),
+    home: const SplashScreen(),
     theme: ThemeData(
       fontFamily: "kindness",
       useMaterial3: true,
-        primarySwatch: Colors.deepOrange,
+        primarySwatch: Colors.deepPurple,
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           selectedIconTheme : IconThemeData(
               color: Colors.deepOrange
@@ -27,7 +27,7 @@ void main(){
           ),
           titleTextStyle: TextStyle(color: Colors.black,fontSize: 25,fontWeight: FontWeight.bold),
           systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: Colors.white,
+            statusBarColor: Colors.deepPurple,
             statusBarIconBrightness: Brightness.dark,
           ),
           color: Colors.white,
