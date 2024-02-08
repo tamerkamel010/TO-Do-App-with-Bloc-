@@ -10,7 +10,6 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
         splashIconSize: MediaQuery.sizeOf(context).width / 2.5,
-        duration: 4000,
         splash: CircleAvatar(
           backgroundColor: Colors.white,
           radius: (MediaQuery.sizeOf(context).width/2)+20,

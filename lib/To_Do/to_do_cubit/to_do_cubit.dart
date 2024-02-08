@@ -1,15 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:to_do_app/To_Do/screens/new_tasks.dart';
 import 'package:to_do_app/To_Do/to_do_cubit/to_do_states.dart';
-
 import '../screens/archived.dart';
-import '../screens/deleted.dart';
 import '../screens/done.dart';
-
-
 class ToDoCubit extends Cubit<ToDoStates> {
   ToDoCubit() :super(InitialState());
   //one method one state
@@ -28,7 +23,6 @@ class ToDoCubit extends Cubit<ToDoStates> {
     const NewTasks(),
     const DoneTasks(),
     const ArchivedTasks(),
-    const Settings(),
   ];
   late Database db;
   List<Map<dynamic,dynamic>>? newTasksList =[];
